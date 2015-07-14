@@ -11,7 +11,16 @@
 --
 -----------------------------------------------------------------------------------------
 
---Add menu
+
+-- hide the status bar
+display.setStatusBar( display.HiddenStatusBar )
+ 
+-- include the Corona "composer" module
+local composer = require "composer"
+
+-- load menu screen
+composer.gotoScene( "menu" )
+
 
 
 -- Start the physics engine
@@ -30,8 +39,10 @@ score = 0
 scoreText = display.newText(score, halfW, 10)
 
 --declare sounds
-local bombPop = audio.loadSound("sounds/bombPop.wav")
-local balloonPop = audio.loadSound("sounds/balloonPop.wav")
+local soundTable = {
+   balloonSound = audio.loadSound( "sounds/balloonPop.ogg" ),
+   bombSound = audio.loadSound( "sounds/bombPop.ogg" ),
+}
 
 --Add background music
 -- Define music variables
@@ -49,7 +60,7 @@ local function balloonTouched(event)
         event.target:removeSelf()
 		score = score + 1
 		scoreText.text = score
-		audio.play =balloonPop
+		audio.play( soundTable["balloonSound"] )
     end
 end
 
@@ -62,20 +73,12 @@ local function bombTouched(event)
         event.target:removeSelf()
 		score = math.floor(score * 0.5)
 		scoreText.text = score
-		audio.play =bombPop
+		audio.play( soundTable["bombSound"] )
     end
 end
 ----------------------------------------
 
-----------------------------------------
---add sound to balloon
---local function balloonTouched(event)
--- local sound = GGSound:new {1, 2, 3}
---   sound:add ("c.wav", "c")
---    sound:setVolume (0.8)
---    sound:play ("c")    
---end
------------------------------------------
+
 
 -- Delete objects which has fallen off the bottom of the screen
 local function offscreen(self, event)
