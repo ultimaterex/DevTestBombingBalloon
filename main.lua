@@ -30,8 +30,8 @@ score = 0
 scoreText = display.newText(score, halfW, 10)
 
 --declare sounds
-local sound = audio.loadSound("music/bombPop.mp3")
-local sound = audio.loadSound("music/balloonPop.mp3")
+local bombPop = audio.loadSound("sounds/bombPop.wav")
+local balloonPop = audio.loadSound("sounds/balloonPop.wav")
 
 --Add background music
 -- Define music variables
@@ -49,6 +49,7 @@ local function balloonTouched(event)
         event.target:removeSelf()
 		score = score + 1
 		scoreText.text = score
+		audio.play =balloonPop
     end
 end
 
@@ -61,6 +62,7 @@ local function bombTouched(event)
         event.target:removeSelf()
 		score = math.floor(score * 0.5)
 		scoreText.text = score
+		audio.play =bombPop
     end
 end
 ----------------------------------------
