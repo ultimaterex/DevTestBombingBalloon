@@ -19,7 +19,7 @@ display.setStatusBar( display.HiddenStatusBar )
 local composer = require "composer"
 
 -- load menu screen
-composer.gotoScene( "menu" )
+--composer.gotoScene( "menu" )
 
 
 
@@ -32,11 +32,11 @@ halfW = display.contentWidth*0.5
 halfH = display.contentHeight*0.5
 
 -- Set the background
-local bkg = display.newImage( "night_sky.png", halfW, halfH )
+local bkg = display.newImage( "assets/night_sky.png", halfW, halfH )
 
 -- Score
 score = 0
-scoreText = display.newText(score, halfW, 10)
+scoreText = display.newText(score, 270, 10)
 
 --declare sounds
 local soundTable = {
@@ -44,13 +44,18 @@ local soundTable = {
    bombSound = audio.loadSound( "sounds/bombPop.ogg" ),
 }
 
+--live system
+--add life value
+life = 3
+lifeText = display.newText(life, 50, 10)
+
+
 --Add background music
 -- Define music variables
 local gameMusic = audio.loadStream( "sounds/gamemusic.mp3" )
  
 -- Play the music
 local gameMusicChannel = audio.play( gameMusic, { loops = -1 } )
-
 
 -- Called when the balloon is tapped by the player
 -- Increase score by 1
@@ -71,8 +76,8 @@ local function bombTouched(event)
 	if ( event.phase == "began" ) then
 		Runtime:removeEventListener( "enterFrame", event.self )
         event.target:removeSelf()
-		score = math.floor(score * 0.5)
-		scoreText.text = score
+		life = life - 1
+		lifeText.text = life
 		audio.play( soundTable["bombSound"] )
     end
 end
@@ -97,14 +102,14 @@ local function addNewBalloonOrBomb()
 	local startX = math.random(display.contentWidth*0.1,display.contentWidth*0.9)
 	if(math.random(1,5)==1) then
 		-- BOMB!
-		local bomb = display.newImage( "bomb.png", startX, -300)
+		local bomb = display.newImage( "assets/bomb.png", startX, -300)
 		physics.addBody( bomb )
 		bomb.enterFrame = offscreen
 		Runtime:addEventListener( "enterFrame", bomb )
 		bomb:addEventListener( "touch", bombTouched )
 	else
 		-- Balloon
-		local balloon = display.newImage( "red_balloon.png", startX, -300)
+		local balloon = display.newImage( "assets/red_balloon.png", startX, -300)
 		physics.addBody( balloon )
 		balloon.enterFrame = offscreen
 		Runtime:addEventListener( "enterFrame", balloon )
@@ -112,8 +117,24 @@ local function addNewBalloonOrBomb()
 	end
 end
 
+--add losing method
+--local function gameOver(event)
+--	if (life = 0) then
+	
+--end
+
+
+
+
+
+
+
 -- Add a new balloon or bomb now
 addNewBalloonOrBomb()
 
+
+
 -- Keep adding a new balloon or bomb every 0.5 seconds
 timer.performWithDelay( 500, addNewBalloonOrBomb, 0 )
+
+
